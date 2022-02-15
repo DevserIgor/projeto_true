@@ -4,18 +4,17 @@ services:
   app:
     build: .
     entrypoint: .docker/entrypoint.sh
-    container_name: apivendas-app
+    container_name: custom_proof-API
     ports:
       - '3333:3333'
     volumes:
       - .:/home/node/app
     depends_on:
       - db
-      - redis
 
   db:
     build: .docker/postgres
-    container_name: apivendas-db
+    container_name: custom_proof-db
     restart: always
     tty: true
     ports:
@@ -24,31 +23,4 @@ services:
       - .docker/dbdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=apivendas
-
-  redis:
-    image: 'bitnami/redis:latest'
-    container_name: apivendas-redis
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: apivendas-pgadmin
-    tty: true
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-    ports:
-      - '8000:80'
-    depends_on:
-      - db
-
-  redisClient:
-    image: redislabs/redisinsight:latest
-    container_name: apivendas-redis-client
-    tty: true
-    ports:
-      - '8001:8001'
-    depends_on:
-      - redis
+      - POSTGRES_DB=custom_proof
