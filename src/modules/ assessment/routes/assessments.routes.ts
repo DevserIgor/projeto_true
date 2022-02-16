@@ -2,14 +2,17 @@ import { Router } from 'express';
 
 import { celebrate, Joi, Segments } from 'celebrate';
 import AssessmentsController from '../controllers/AssessmentsController';
+import allowedStores from '@shared/http/middlewares/allowedStores';
+import isAuthenticated from '@shared/http/middlewares/isAuthenticated';
 
 const assessmentsRouter = Router();
 const assessmentsController = new AssessmentsController();
 
-assessmentsRouter.get('/', assessmentsController.index);
+assessmentsRouter.get('/', allowedStores, assessmentsController.index);
 
 assessmentsRouter.get(
   '/:id',
+  isAuthenticated,
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
@@ -20,6 +23,7 @@ assessmentsRouter.get(
 
 assessmentsRouter.post(
   '/',
+  isAuthenticated,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -33,6 +37,7 @@ assessmentsRouter.post(
 
 assessmentsRouter.put(
   '/:id',
+  isAuthenticated,
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),

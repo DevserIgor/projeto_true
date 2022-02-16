@@ -9,11 +9,23 @@ import routes from './routes';
 import AppError from '@shared/errors/AppError';
 import '@shared/typeorm';
 import uploadConfig from '@config/upload';
-import rateLimiter from './middlewares/rateLimiter';
+// import rateLimiter from './middlewares/rateLimiter';
 
 const app = express();
 
-app.use(cors());
+const whitelist = ['http://example1.com', 'http://example2.com'];
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     console.log(origin);
+//     // if (whitelist.indexOf(origin) !== -1) {
+//     //   callback(null, true);
+//     // } else {
+//     //   callback(new Error('Not allowed by CORS'));
+//     // }
+//   },
+// };
+
+// app.use(cors(corsOptions));
 
 app.use(express.json());
 

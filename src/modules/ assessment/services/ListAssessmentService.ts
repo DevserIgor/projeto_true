@@ -19,7 +19,8 @@ class ListAssessmentService {
 
     const assessments = await assessmentsRepository
       .createQueryBuilder()
-      .paginate();
+      .addOrderBy('random()')
+      .paginate(10);
 
     return assessments as IPaginateAssessment;
   }
