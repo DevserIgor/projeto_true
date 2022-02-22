@@ -26,7 +26,7 @@ const whitelist = ['http://example1.com', 'http://example2.com'];
 // };
 
 // app.use(cors(corsOptions));
-
+app.use(cors());
 app.use(express.json());
 
 // app.use(rateLimiter);
@@ -50,11 +50,11 @@ app.use(
 
     return response.status(500).json({
       status: 'error',
-      message: 'Internal server error.',
+      message: 'Internal server error.' + error.message,
     });
   },
 );
 
-app.listen(3333, () => {
-  console.log('Server Up');
+app.listen(process.env.PORT || 3333, () => {
+  console.log(`Server up on ${process.env.PORT || 3333}`);
 });
