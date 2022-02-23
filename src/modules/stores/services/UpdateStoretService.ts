@@ -8,9 +8,16 @@ interface IRequest {
   cnpj: string;
   name: string;
   domain: string;
+  active: boolean;
 }
 class UpdateStoretService {
-  public async execute({ id, cnpj, name, domain }: IRequest): Promise<Store> {
+  public async execute({
+    id,
+    cnpj,
+    name,
+    domain,
+    active,
+  }: IRequest): Promise<Store> {
     const storesRepository = getCustomRepository(StoreRepository);
 
     const store = await storesRepository.findOne(id);
@@ -31,6 +38,7 @@ class UpdateStoretService {
     store.cnpj = cnpj;
     store.name = name;
     store.domain = domain;
+    store.active = active;
 
     await storesRepository.save(store);
 

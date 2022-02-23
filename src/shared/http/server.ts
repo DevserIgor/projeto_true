@@ -1,3 +1,4 @@
+import { sleep } from './middlewares/sleep';
 import 'reflect-metadata';
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
@@ -32,6 +33,7 @@ app.use(express.json());
 // app.use(rateLimiter);
 
 app.use(pagination);
+app.use(sleep);
 
 app.use('/files', express.static(uploadConfig.directory));
 

@@ -17,7 +17,7 @@ class ListStoreService {
   public async execute(): Promise<IPaginateStore> {
     const storesRepository = getCustomRepository(StoreRepository);
 
-    const stores = await storesRepository.createQueryBuilder().paginate();
+    const stores = await storesRepository.createQueryBuilder().paginate(5);
 
     return stores as IPaginateStore;
   }

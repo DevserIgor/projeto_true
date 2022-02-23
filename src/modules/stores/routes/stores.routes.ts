@@ -47,6 +47,7 @@ storesRouter.put(
       ),
       name: Joi.string().required(),
       domain: Joi.string().required(),
+      active: Joi.bool().required(),
     },
   }),
   storesController.update,

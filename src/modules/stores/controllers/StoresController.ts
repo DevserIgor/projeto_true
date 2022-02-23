@@ -38,7 +38,7 @@ export default class StoresController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { cnpj, name, domain } = request.body;
+    const { cnpj, name, domain, active } = request.body;
     const { id } = request.params;
 
     const updateStore = new UpdateStoretService();
@@ -48,6 +48,7 @@ export default class StoresController {
       cnpj,
       name,
       domain,
+      active,
     });
 
     return response.json(store);
