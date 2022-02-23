@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import CreateAssessmentService from '../services/CreateAssessmentService';
 import DeleteAssessmentService from '../services/DeleteAssessmentService';
+import ListRandomAssessmentService from '../services/ListRandomAssessmentService';
 import ListAssessmentService from '../services/ListAssessmentService';
 import ShowAssessmentService from '../services/ShowAssessmentService';
 import UpdateAssessmentService from '../services/UpdateAssessmentService';
@@ -8,6 +9,17 @@ import UpdateAssessmentService from '../services/UpdateAssessmentService';
 export default class AssessmentsController {
   public async index(request: Request, response: Response): Promise<Response> {
     const listAssessments = new ListAssessmentService();
+
+    const assessment = await listAssessments.execute();
+
+    return response.json(assessment);
+  }
+
+  public async listRandom(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const listAssessments = new ListRandomAssessmentService();
 
     const assessment = await listAssessments.execute();
 

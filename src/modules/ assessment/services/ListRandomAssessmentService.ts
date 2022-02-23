@@ -13,18 +13,17 @@ interface IPaginateAssessment {
   data: Assessment[];
 }
 
-class ListAssessmentService {
+class ListRandomAssessmentService {
   public async execute(): Promise<IPaginateAssessment> {
     const assessmentsRepository = getCustomRepository(AssessmentRepository);
 
     const assessments = await assessmentsRepository
       .createQueryBuilder()
-      .paginate(5);
-
-    // const stores = await storesRepository.createQueryBuilder().paginate(5);
+      .addOrderBy('random()')
+      .paginate(10);
 
     return assessments as IPaginateAssessment;
   }
 }
 
-export default ListAssessmentService;
+export default ListRandomAssessmentService;

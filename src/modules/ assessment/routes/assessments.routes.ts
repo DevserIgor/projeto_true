@@ -8,7 +8,14 @@ import isAuthenticated from '@shared/http/middlewares/isAuthenticated';
 const assessmentsRouter = Router();
 const assessmentsController = new AssessmentsController();
 
-assessmentsRouter.get('/', allowedStores, assessmentsController.index);
+assessmentsRouter.get(
+  '/list-random',
+  allowedStores,
+  assessmentsController.listRandom,
+);
+
+assessmentsRouter.use(isAuthenticated);
+assessmentsRouter.get('/', assessmentsController.index);
 
 assessmentsRouter.get(
   '/:id',
