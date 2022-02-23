@@ -7,11 +7,20 @@ import UpdateAssessmentService from '../services/UpdateAssessmentService';
 
 export default class AssessmentsController {
   public async index(request: Request, response: Response): Promise<Response> {
+    const { name, stars, message, dateStart, dateEnd } = request.query;
+
     const listAssessments = new ListAssessmentService();
 
-    const assessment = await listAssessments.execute();
+    const assessment = await listAssessments.execute({
+      name,
+      stars,
+      message,
+      dateStart,
+      dateEnd,
+    });
 
     return response.json(assessment);
+    // return response.json([]);
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
