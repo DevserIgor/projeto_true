@@ -7,9 +7,15 @@ interface IRequest {
   cnpj: string;
   name: string;
   domain: string;
+  active: boolean;
 }
 class CreateStoreService {
-  public async execute({ cnpj, name, domain }: IRequest): Promise<Store> {
+  public async execute({
+    cnpj,
+    name,
+    domain,
+    active,
+  }: IRequest): Promise<Store> {
     const storesRepository = getCustomRepository(StoreRepository);
 
     const storeExistsCnpj = await storesRepository.findByCnpj(cnpj);
@@ -26,6 +32,7 @@ class CreateStoreService {
       cnpj,
       name,
       domain,
+      active,
     });
 
     await storesRepository.save(store);

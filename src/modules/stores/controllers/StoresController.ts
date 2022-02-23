@@ -24,7 +24,7 @@ export default class StoresController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { cnpj, name, domain } = request.body;
+    const { cnpj, name, domain, active } = request.body;
 
     const createStore = new CreateStoreService();
 
@@ -32,6 +32,7 @@ export default class StoresController {
       cnpj,
       name,
       domain,
+      active,
     });
 
     return response.json(store);
