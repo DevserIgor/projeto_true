@@ -1,10 +1,4 @@
-import {
-  Between,
-  getCustomRepository,
-  ILike,
-  LessThan,
-  MoreThan,
-} from 'typeorm';
+import { Between, getCustomRepository, ILike } from 'typeorm';
 import Assessment from '../typeorm/entities/Assessment';
 import AssessmentRepository from '../typeorm/repositories/AssessmentRepository';
 
@@ -20,11 +14,11 @@ interface IPaginateAssessment {
 }
 
 interface IFiltersQuery {
-  name?: string;
-  stars?: number;
-  message?: string;
-  dateStart?: Date;
-  dateEnd?: Date;
+  name: string;
+  stars: number;
+  message: string;
+  dateStart: Date;
+  dateEnd: Date;
 }
 
 class ListAssessmentService {
@@ -56,9 +50,14 @@ class ListAssessmentService {
     }
 
     if (dateStart && dateEnd) {
-      queryBuilder.where({ date: Between(dateStart, dateEnd) });
+      queryBuilder.where({
+        date: Between(`${dateStart} 00:00:00`, `${dateEnd} 23:59:59`),
+      });
     }
-    const assessments = await queryBuilder.addOrderBy('random()').paginate(10);
+    const assessments = await queryBuilder
+      .addOrderBy('date', 'DESC')
+      .addOrderBy('name', 'ASC')
+      .paginate(5);
 
     return assessments as IPaginateAssessment;
   }

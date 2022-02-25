@@ -4,11 +4,35 @@ import DeleteAssessmentService from '../services/DeleteAssessmentService';
 import ListAssessmentService from '../services/ListAssessmentService';
 import ShowAssessmentService from '../services/ShowAssessmentService';
 import UpdateAssessmentService from '../services/UpdateAssessmentService';
+import * as core from 'express-serve-static-core';
+interface PaginationQuery {
+  page: string;
+}
+
+interface FilterQuery extends PaginationQuery {
+  name: string;
+  stars: number;
+  message: string;
+  dateStart: Date;
+  dateEnd: Date;
+}
+interface RequestFilter
+  extends Request<
+    core.ParamsDictionary,
+    any,
+    any,
+    FilterQuery,
+    Record<string, any>
+  > {
+  query: FilterQuery;
+}
 
 export default class AssessmentsController {
-  public async index(request: Request, response: Response): Promise<Response> {
+  public async index(
+    request: RequestFilter,
+    response: Response,
+  ): Promise<Response> {
     const { name, stars, message, dateStart, dateEnd } = request.query;
-
     const listAssessments = new ListAssessmentService();
 
     const assessment = await listAssessments.execute({
@@ -20,7 +44,6 @@ export default class AssessmentsController {
     });
 
     return response.json(assessment);
-    // return response.json([]);
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
