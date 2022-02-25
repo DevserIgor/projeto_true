@@ -1,5 +1,5 @@
 import AppError from '@shared/errors/AppError';
-import { getCustomRepository, Timestamp } from 'typeorm';
+import { getCustomRepository } from 'typeorm';
 import Assessment from '../typeorm/entities/Assessment';
 import AssessmentRepository from '../typeorm/repositories/AssessmentRepository';
 
