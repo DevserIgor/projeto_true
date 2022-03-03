@@ -1,4 +1,10 @@
-import { Between, getCustomRepository, ILike } from 'typeorm';
+import {
+  Between,
+  getCustomRepository,
+  ILike,
+  LessThan,
+  MoreThan,
+} from 'typeorm';
 import Assessment from '../typeorm/entities/Assessment';
 import AssessmentRepository from '../typeorm/repositories/AssessmentRepository';
 
@@ -33,28 +39,35 @@ class ListAssessmentService {
 
     const queryBuilder = assessmentsRepository.createQueryBuilder();
 
+    let where: any = {};
+
     if (stars) {
-      queryBuilder.where({ stars });
+      where = { ...where, stars };
     }
 
     if (name) {
-      queryBuilder.where({
-        name: ILike(`%${name}%`),
-      });
+      where = { ...where, name: ILike(`%${name}%`) };
     }
 
     if (message) {
-      queryBuilder.where({
-        message: ILike(`%${message}%`),
-      });
+      where = { ...where, message: ILike(`%${message}%`) };
     }
 
-    if (dateStart && dateEnd) {
-      queryBuilder.where({
-        date: Between(`${dateStart} 00:00:00`, `${dateEnd} 23:59:59`),
-      });
+    if (dateStart) {
+      where = {
+        ...where,
+        date: MoreThan(`${dateStart} 00:00:00`),
+      };
     }
+    if (dateEnd) {
+      where = {
+        ...where,
+        date: LessThan(`${dateEnd} 23:59:59`),
+      };
+    }
+
     const assessments = await queryBuilder
+      .where(where)
       .addOrderBy('date', 'DESC')
       .addOrderBy('name', 'ASC')
       .paginate(5);
