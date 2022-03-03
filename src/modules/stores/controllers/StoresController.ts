@@ -10,10 +10,10 @@ interface PaginationQuery {
 }
 
 interface FilterQuery extends PaginationQuery {
-  cnpj: string;
-  name: string;
-  domain: string;
-  active: boolean;
+  cnpj?: string;
+  name?: string;
+  domain?: string;
+  active?: boolean;
 }
 interface RequestFilter
   extends Request<

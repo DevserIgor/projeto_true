@@ -13,10 +13,10 @@ interface IPaginateStore {
   data: Store[];
 }
 interface IFiltersQuery {
-  cnpj: string;
-  name: string;
-  domain: string;
-  active: boolean;
+  cnpj?: string;
+  name?: string;
+  domain?: string;
+  active?: boolean;
 }
 
 class ListStoreService {
@@ -30,28 +30,24 @@ class ListStoreService {
 
     const queryBuilder = storesRepository.createQueryBuilder();
 
+    let where: any = {};
     if (cnpj) {
-      queryBuilder.where({
-        cnpj: ILike(`%${cnpj}%`),
-      });
+      where = { ...where, cnpj: ILike(`%${cnpj}%`) };
     }
     if (name) {
-      queryBuilder.where({
-        name: ILike(`%${name}%`),
-      });
+      where = { ...where, name: ILike(`%${name}%`) };
     }
     if (domain) {
-      queryBuilder.where({
-        domain: ILike(`%${domain}%`),
-      });
+      where = { ...where, domain: ILike(`%${domain}%`) };
     }
     if (active) {
-      queryBuilder.where({
-        active,
-      });
+      where = { ...where, active };
     }
 
-    const stores = await queryBuilder.addOrderBy('name', 'ASC').paginate(5);
+    const stores = await queryBuilder
+      .where(where)
+      .addOrderBy('name', 'ASC')
+      .paginate(5);
 
     return stores as IPaginateStore;
   }
