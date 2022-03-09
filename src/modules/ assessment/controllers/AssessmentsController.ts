@@ -68,14 +68,17 @@ export default class AssessmentsController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, stars, message, date } = request.body;
-
+    const { name, stars, message, date, product_id } = request.body;
+    const { origin } = request.headers;
+    const domain = product_id ? origin : '';
     const createAssessment = new CreateAssessmentService();
 
     const assessment = await createAssessment.execute({
       name,
       stars,
       message,
+      product_id,
+      domain,
       date,
     });
 

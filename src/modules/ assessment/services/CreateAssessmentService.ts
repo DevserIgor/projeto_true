@@ -1,3 +1,4 @@
+import StoreRepository from '@modules/stores/typeorm/repositories/StoresRepository';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
 import Assessment from '../typeorm/entities/Assessment';
@@ -8,7 +9,7 @@ interface IRequest {
   stars: number;
   message: string;
   product_id: number;
-  store_id: string;
+  domain?: string;
   date: Date;
 }
 class CreateAssessmentService {
@@ -17,20 +18,24 @@ class CreateAssessmentService {
     stars,
     message,
     product_id,
-    store_id,
+    domain,
     date,
   }: IRequest): Promise<Assessment> {
     const assessmentsRepository = getCustomRepository(AssessmentRepository);
+    const storesRepository = getCustomRepository(StoreRepository);
 
-    const assessment = assessmentsRepository.create({
+    const storeExists = domain
+      ? await storesRepository.findByDomain(domain)
+      : undefined;
+
+    const assessment = assessmentsRepository.createAssessment({
       name,
       stars,
       message,
       product_id,
       date,
+      store: storeExists,
     });
-
-    await assessmentsRepository.save(assessment);
 
     return assessment;
   }

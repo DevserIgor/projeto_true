@@ -36,6 +36,7 @@ assessmentsRouter.post(
       name: Joi.string().required(),
       stars: Joi.number().required(),
       message: Joi.string().required(),
+      product_id: Joi.optional(),
       date: Joi.date().required(),
     },
   }),
