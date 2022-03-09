@@ -7,6 +7,8 @@ interface IRequest {
   name: string;
   stars: number;
   message: string;
+  product_id: number;
+  store_id: string;
   date: Date;
 }
 class CreateAssessmentService {
@@ -14,6 +16,8 @@ class CreateAssessmentService {
     name,
     stars,
     message,
+    product_id,
+    store_id,
     date,
   }: IRequest): Promise<Assessment> {
     const assessmentsRepository = getCustomRepository(AssessmentRepository);
@@ -22,6 +26,7 @@ class CreateAssessmentService {
       name,
       stars,
       message,
+      product_id,
       date,
     });
 
