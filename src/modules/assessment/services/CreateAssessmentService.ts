@@ -1,7 +1,7 @@
+import Store from '@modules/stores/typeorm/entities/Store';
 import StoreRepository from '@modules/stores/typeorm/repositories/StoresRepository';
 import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
-import Assessment from '../typeorm/entities/Assessment';
 import AssessmentRepository from '../typeorm/repositories/AssessmentRepository';
 
 interface IRequest {
@@ -11,6 +11,17 @@ interface IRequest {
   product_id: number;
   domain?: string;
   date: Date;
+  approved: boolean;
+}
+
+interface IResponse {
+  name: string;
+  stars: number;
+  message: string;
+  product_id: number;
+  date: Date;
+  store?: Store;
+  approved: boolean;
 }
 class CreateAssessmentService {
   public async execute({
@@ -20,7 +31,8 @@ class CreateAssessmentService {
     product_id,
     domain,
     date,
-  }: IRequest): Promise<Assessment> {
+    approved,
+  }: IRequest): Promise<IResponse> {
     const assessmentsRepository = getCustomRepository(AssessmentRepository);
     const storesRepository = getCustomRepository(StoreRepository);
 
@@ -35,6 +47,7 @@ class CreateAssessmentService {
       product_id,
       date,
       store: storeExists,
+      approved,
     });
 
     return assessment;

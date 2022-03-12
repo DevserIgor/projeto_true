@@ -26,6 +26,9 @@ class Assessment {
   @Column('int')
   product_id: number;
 
+  @Column('bool')
+  approved: boolean;
+
   @ManyToOne(() => Store)
   @JoinColumn({ name: 'store_id' })
   store: Store;

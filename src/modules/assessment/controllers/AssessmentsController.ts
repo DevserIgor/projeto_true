@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import CreateAssessmentService from '../services/CreateAssessmentService';
 import DeleteAssessmentService from '../services/DeleteAssessmentService';
-import ListRandomAssessmentService from '../services/ListRandomAssessmentService';
 import ListAssessmentService from '../services/ListAssessmentService';
 import ShowAssessmentService from '../services/ShowAssessmentService';
 import UpdateAssessmentService from '../services/UpdateAssessmentService';
@@ -47,17 +46,6 @@ export default class AssessmentsController {
     return response.json(assessment);
   }
 
-  public async listRandom(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const listAssessments = new ListRandomAssessmentService();
-
-    const assessment = await listAssessments.execute();
-
-    return response.json(assessment);
-  }
-
   public async show(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
 
@@ -68,7 +56,7 @@ export default class AssessmentsController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, stars, message, date, product_id } = request.body;
+    const { name, stars, message, date, product_id, approved } = request.body;
     const { origin } = request.headers;
     const domain = product_id ? origin : '';
     const createAssessment = new CreateAssessmentService();
@@ -80,6 +68,7 @@ export default class AssessmentsController {
       product_id,
       domain,
       date,
+      approved: !!approved,
     });
 
     return response.json(assessment);

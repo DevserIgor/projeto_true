@@ -2,17 +2,10 @@ import { Router } from 'express';
 
 import { celebrate, Joi, Segments } from 'celebrate';
 import AssessmentsController from '../controllers/AssessmentsController';
-import allowedStores from '@shared/http/middlewares/allowedStores';
 import isAuthenticated from '@shared/http/middlewares/isAuthenticated';
 
 const assessmentsRouter = Router();
 const assessmentsController = new AssessmentsController();
-
-assessmentsRouter.get(
-  '/list-random',
-  allowedStores,
-  assessmentsController.listRandom,
-);
 
 assessmentsRouter.use(isAuthenticated);
 assessmentsRouter.get('/', assessmentsController.index);
@@ -38,6 +31,7 @@ assessmentsRouter.post(
       message: Joi.string().required(),
       product_id: Joi.optional(),
       date: Joi.date().required(),
+      approved: Joi.optional(),
     },
   }),
   assessmentsController.create,
