@@ -1,7 +1,10 @@
+import Store from '@modules/stores/typeorm/entities/Store';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,6 +22,16 @@ class Assessment {
 
   @Column()
   message: string;
+
+  @Column('int')
+  product_id: number;
+
+  @Column('bool')
+  approved: boolean;
+
+  @ManyToOne(() => Store)
+  @JoinColumn({ name: 'store_id' })
+  store: Store;
 
   @CreateDateColumn()
   date: Date;

@@ -17,6 +17,7 @@ interface IFiltersQuery {
   name: string;
   stars: number;
   message: string;
+  approved: boolean;
   dateStart: Date;
   dateEnd: Date;
 }
@@ -26,6 +27,7 @@ class ListAssessmentService {
     name,
     stars,
     message,
+    approved,
     dateStart,
     dateEnd,
   }: IFiltersQuery): Promise<IPaginateAssessment> {
@@ -47,6 +49,10 @@ class ListAssessmentService {
       queryBuilder.where({
         message: ILike(`%${message}%`),
       });
+    }
+
+    if (approved) {
+      queryBuilder.where({ approved });
     }
 
     if (dateStart && dateEnd) {

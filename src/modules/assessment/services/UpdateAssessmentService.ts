@@ -8,6 +8,7 @@ interface IRequest {
   name: string;
   stars: number;
   message: string;
+  approved: boolean;
   date: Date;
 }
 class UpdateAssessmentService {
@@ -15,6 +16,7 @@ class UpdateAssessmentService {
     id,
     name,
     message,
+    approved,
     stars,
     date,
   }: IRequest): Promise<Assessment> {
@@ -27,6 +29,7 @@ class UpdateAssessmentService {
 
     assessment.name = name;
     assessment.message = message;
+    assessment.approved = approved;
     assessment.stars = stars;
     assessment.date = date;
 
