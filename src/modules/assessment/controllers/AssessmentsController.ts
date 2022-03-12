@@ -13,6 +13,7 @@ interface FilterQuery extends PaginationQuery {
   name: string;
   stars: number;
   message: string;
+  approved: boolean;
   dateStart: Date;
   dateEnd: Date;
 }
@@ -32,13 +33,15 @@ export default class AssessmentsController {
     request: RequestFilter,
     response: Response,
   ): Promise<Response> {
-    const { name, stars, message, dateStart, dateEnd } = request.query;
+    const { name, stars, message, approved, dateStart, dateEnd } =
+      request.query;
     const listAssessments = new ListAssessmentService();
 
     const assessment = await listAssessments.execute({
       name,
       stars,
       message,
+      approved,
       dateStart,
       dateEnd,
     });
@@ -75,7 +78,7 @@ export default class AssessmentsController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { name, stars, message, date } = request.body;
+    const { name, stars, message, approved, date } = request.body;
     const { id } = request.params;
 
     const updateAssessment = new UpdateAssessmentService();
@@ -84,6 +87,7 @@ export default class AssessmentsController {
       id,
       name,
       message,
+      approved,
       stars,
       date,
     });
