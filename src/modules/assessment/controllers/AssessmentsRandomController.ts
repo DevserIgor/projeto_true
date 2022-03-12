@@ -5,7 +5,7 @@ import UpdateAssessmentService from '../services/UpdateAssessmentService';
 import * as core from 'express-serve-static-core';
 
 interface PaginationQuery {
-  page: string;
+  page: number;
 }
 
 interface FilterQuery extends PaginationQuery {

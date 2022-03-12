@@ -25,9 +25,9 @@ interface IPaginateAssessment {
   data: IAssessmentResponse[];
 }
 interface IFiltersQuery {
-  product_id: number;
-  domain: string;
-  page: number;
+  product_id?: number;
+  domain?: string;
+  page: number | 1;
 }
 
 class ListAssessmentRandomService {
@@ -39,22 +39,13 @@ class ListAssessmentRandomService {
     const assessmentsRepository = getCustomRepository(AssessmentRepository);
     const storesRepository = getCustomRepository(StoreRepository);
 
-    if (product_id && domain) {
-      const assessments = assessmentsRepository.findRandom({
-        product_id,
-        domain,
-        page,
-      });
+    const assessments = assessmentsRepository.findRandom({
+      product_id,
+      domain,
+      page,
+    });
 
-      return assessments;
-    } else {
-      const queryBuilder = assessmentsRepository.createQueryBuilder();
-      const assessments = await queryBuilder
-        .orderBy('asmt.date', 'DESC')
-        .orderBy('RAND()')
-        .getMany();
-      return assessments;
-    }
+    return assessments;
   }
 }
 

@@ -13,9 +13,9 @@ interface IRequest {
 }
 
 interface IRequestRandomList {
-  product_id: number;
-  domain: string;
-  page: number;
+  product_id?: number;
+  domain?: string;
+  page: number | 1;
 }
 
 interface IResponse {
@@ -41,22 +41,41 @@ class AssessmentRepository extends Repository<Assessment> {
   public async findRandom({
     product_id,
     domain,
-    page = 1,
+    page,
   }: IRequestRandomList): Promise<Assessment[]> {
-    const random = page > 1 ? ', random()' : '';
+    const random = page && page > 1 ? '' : ', random()';
+    const offset = page == 1 || page == undefined ? '' : `offset ${page}`;
 
-    const assessments = await this.manager.query(
-      `select asmt.*
-        from assessments asmt
-        left join stores st on st.id = asmt.store_id and st.domain = '${domain}'
-        where
-          asmt.product_id = ${product_id}
-          or asmt.product_id is null
-        order by asmt.product_id, asmt.date ${random}
-        limit 15 offset ${page}
-      `,
-    );
-    return assessments;
+    if (!product_id && !domain) {
+      const queryBuilder = this.createQueryBuilder('asmt');
+
+      queryBuilder.orderBy('asmt.date', 'DESC');
+
+      if (page <= 1) {
+        queryBuilder.orderBy('RANDOM()');
+      } else {
+        queryBuilder.offset(page);
+      }
+      queryBuilder.limit(15);
+
+      const assessments = await queryBuilder.getMany();
+      return assessments;
+    } else {
+      const sql = `
+        select asmt.*
+          from assessments asmt
+          left join stores st on st.id = asmt.store_id and st.domain = '${domain}'
+          where
+            asmt.product_id = ${product_id}
+            or asmt.product_id is null
+          order by asmt.product_id, asmt.date ${random}
+          limit 15 ${offset}
+      `;
+
+      const assessments = await this.manager.query(sql);
+
+      return assessments;
+    }
   }
 
   public async createAssessment({
