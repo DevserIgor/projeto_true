@@ -49,6 +49,7 @@ assessmentsRouter.put(
       stars: Joi.number().required(),
       message: Joi.string().required(),
       date: Joi.date().required(),
+      approved: Joi.boolean().required(),
     },
   }),
   assessmentsController.update,
