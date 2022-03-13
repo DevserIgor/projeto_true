@@ -15,7 +15,7 @@ assessmentsRandomRouter.get('/', assessmentsRandomController.index);
 
 assessmentsRandomRouter.post(
   '/',
-  isAuthenticated,
+  // isAuthenticated,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),

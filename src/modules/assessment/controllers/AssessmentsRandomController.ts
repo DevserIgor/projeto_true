@@ -61,7 +61,7 @@ export default class AssessmentsRandomController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { name, stars, message, date } = request.body;
+    const { name, stars, message, date, approved } = request.body;
     const { id } = request.params;
 
     const updateAssessment = new UpdateAssessmentService();
@@ -72,6 +72,7 @@ export default class AssessmentsRandomController {
       message,
       stars,
       date,
+      approved,
     });
 
     return response.json(assessment);
