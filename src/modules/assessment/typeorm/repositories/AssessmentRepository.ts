@@ -66,8 +66,10 @@ class AssessmentRepository extends Repository<Assessment> {
           from assessments asmt
           left join stores st on st.id = asmt.store_id and st.domain = '${domain}'
           where
+            asmt.approved = true
             asmt.product_id = ${product_id}
             or asmt.product_id is null
+
           order by asmt.product_id, asmt.date ${random}
           limit 15 ${offset}
       `;
