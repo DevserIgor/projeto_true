@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import CreateAssessmentService from '../services/CreateAssessmentService';
 import DeleteAssessmentService from '../services/DeleteAssessmentService';
-import ListRandomAssessmentService from '../services/ListRandomAssessmentService';
 import ListAssessmentService from '../services/ListAssessmentService';
 import ShowAssessmentService from '../services/ShowAssessmentService';
 import UpdateAssessmentService from '../services/UpdateAssessmentService';
@@ -14,6 +13,7 @@ interface FilterQuery extends PaginationQuery {
   name: string;
   stars: number;
   message: string;
+  approved: boolean;
   dateStart: Date;
   dateEnd: Date;
 }
@@ -33,27 +33,18 @@ export default class AssessmentsController {
     request: RequestFilter,
     response: Response,
   ): Promise<Response> {
-    const { name, stars, message, dateStart, dateEnd } = request.query;
+    const { name, stars, message, approved, dateStart, dateEnd } =
+      request.query;
     const listAssessments = new ListAssessmentService();
 
     const assessment = await listAssessments.execute({
       name,
       stars,
       message,
+      approved,
       dateStart,
       dateEnd,
     });
-
-    return response.json(assessment);
-  }
-
-  public async listRandom(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const listAssessments = new ListRandomAssessmentService();
-
-    const assessment = await listAssessments.execute();
 
     return response.json(assessment);
   }
@@ -68,22 +59,26 @@ export default class AssessmentsController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, stars, message, date } = request.body;
-
+    const { name, stars, message, date, product_id, approved } = request.body;
+    const { origin } = request.headers;
+    const domain = product_id ? origin : '';
     const createAssessment = new CreateAssessmentService();
 
     const assessment = await createAssessment.execute({
       name,
       stars,
       message,
+      product_id,
+      domain,
       date,
+      approved: !!approved,
     });
 
     return response.json(assessment);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { name, stars, message, date } = request.body;
+    const { name, stars, message, approved, date } = request.body;
     const { id } = request.params;
 
     const updateAssessment = new UpdateAssessmentService();
@@ -92,6 +87,7 @@ export default class AssessmentsController {
       id,
       name,
       message,
+      approved,
       stars,
       date,
     });

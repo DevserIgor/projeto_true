@@ -23,6 +23,7 @@ interface IFiltersQuery {
   name: string;
   stars: number;
   message: string;
+  approved: boolean;
   dateStart: Date;
   dateEnd: Date;
 }
@@ -32,6 +33,7 @@ class ListAssessmentService {
     name,
     stars,
     message,
+    approved,
     dateStart,
     dateEnd,
   }: IFiltersQuery): Promise<IPaginateAssessment> {
@@ -53,17 +55,14 @@ class ListAssessmentService {
       where = { ...where, message: ILike(`%${message}%`) };
     }
 
-    if (dateStart) {
-      where = {
-        ...where,
-        date: MoreThan(`${dateStart} 00:00:00`),
-      };
+    if (approved) {
+      queryBuilder.where({ approved });
     }
-    if (dateEnd) {
-      where = {
-        ...where,
-        date: LessThan(`${dateEnd} 23:59:59`),
-      };
+
+    if (dateStart && dateEnd) {
+      queryBuilder.where({
+        date: Between(`${dateStart} 00:00:00`, `${dateEnd} 23:59:59`),
+      });
     }
 
     const assessments = await queryBuilder
